@@ -1,0 +1,71 @@
+TASK 1: DATA CLEANING & PREPARATION
+Author: Samuel Wanyua
+Date: 27th October 2025
+
+GOAL:
+Clean and structure the provided real estate datasets for analysis and reporting.
+
+DATASETS USED:
+- leases.csv
+- tenants.csv
+- units.csv
+- properties.csv
+- locations.csv
+
+Data Merging and Integration Process
+
+The data integration process involved consolidating information from multiple source tables — including leases, tenants, units, properties, and locations — into a single master dataset for analysis. First, the properties table was merged with the locations table using an outer join on the location_id and id columns. This ensured that every property was enriched with its corresponding location details, such as the area or neighborhood name, without losing any unmatched records.
+
+Next, the resulting prop_loc table was merged with the units dataset using an outer join on the property_id field. This step provided each unit with both property and location context, enabling analysis across multiple dimensions of real estate assets.
+
+In parallel, the leases table was merged with the tenants table on the tenant_id field, again using an outer join. This created a lease_tenant dataset that combined lease contract details with tenant profiles, such as names and contact information.
+
+After preparing both merged datasets, they were combined into one comprehensive dataset by merging lease_tenant with unit_prop_loc on the unit_id column. This unified all information related to tenants, their leases, and the specific units and properties they occupy, including geographic details.
+
+Finally, redundant and duplicated columns generated during the merge process were removed to ensure data clarity and consistency. The result was a clean and complete dataset (merged_df) containing all relevant information across the five original sources — fully ready for cleaning, analysis, and reporting.
+
+DATA QUALITY ISSUES IDENTIFIED
+1. Missing Values
+   - Some lease 'end_date' values were NULL (treated as ongoing leases).
+   - Minor gaps in tenant email fields (validated for presence).
+
+2. Invalid Values
+   - Negative rent_per_month values found — corrected to absolute values.
+   - Negative arrears also standardized to positive amounts.
+
+3. Date Issues
+   - Inconsistent date formats converted to datetime (DD/MM/YYYY).
+   - End dates before start dates flagged as invalid.
+
+4. Duplicates
+   - Checked across tenant names and property-unit relationships — none found.
+
+5. Outliers
+   - Rent outliers manually inspected; extreme but valid (due to property size).
+
+NEW COLUMNS CREATED
+- lease_duration_months:
+    → Duration between start_date and end_date (or today if ongoing).
+- lease_status:
+    → 'Ongoing' if end_date is NULL or future.
+    → 'Expired' if end_date < today.
+    → 'Invalid' if start_date > end_date.
+- valid_lease:
+    → 1 if valid (start < end or ongoing), else 0.
+- annual_rent:
+    → rent_per_month × 12.
+- Standardized 'location' names to Proper Case.
+
+SUMMARY INSIGHTS
+- Total leases: 12
+- Ongoing leases: 6
+- Expired leases: 6
+- Invalid leases: 0
+- Average monthly rent: KES 48,166.67
+- Total annual rent potential: KES 6,936,000.00
+
+OUTPUT
+ Cleaned dataset exported to:
+   Deliverables/Cleaned_Data_Samuel_Wanyua.xlsx 
+   Deliverables/Cleaned_Data_Samuel_Wanyua.csv 
+
