@@ -13,6 +13,20 @@ DATASETS USED:
 - properties.csv
 - locations.csv
 
+------------------------------------
+Data Merging and Integration Process
+------------------------------------
+
+The data integration process involved consolidating information from multiple source tables — including leases, tenants, units, properties, and locations — into a single master dataset for analysis. First, the properties table was merged with the locations table using an outer join on the location_id and id columns. This ensured that every property was enriched with its corresponding location details, such as the area or neighborhood name, without losing any unmatched records.
+
+Next, the resulting prop_loc table was merged with the units dataset using an outer join on the property_id field. This step provided each unit with both property and location context, enabling analysis across multiple dimensions of real estate assets.
+
+In parallel, the leases table was merged with the tenants table on the tenant_id field, again using an outer join. This created a lease_tenant dataset that combined lease contract details with tenant profiles, such as names and contact information.
+
+After preparing both merged datasets, they were combined into one comprehensive dataset by merging lease_tenant with unit_prop_loc on the unit_id column. This unified all information related to tenants, their leases, and the specific units and properties they occupy, including geographic details.
+
+Finally, redundant and duplicated columns generated during the merge process were removed to ensure data clarity and consistency. The result was a clean and complete dataset (merged_df) containing all relevant information across the five original sources — fully ready for cleaning, analysis, and reporting.
+
 ----------------------------------
 DATA QUALITY ISSUES IDENTIFIED
 ----------------------------------
