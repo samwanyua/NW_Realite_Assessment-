@@ -1,0 +1,68 @@
+TASK 1: DATA CLEANING & PREPARATION
+----------------------------------
+Author: Samuel Wanyua
+Date: 27th October 2025
+
+GOAL:
+Clean and structure the provided real estate datasets for analysis and reporting.
+
+DATASETS USED:
+- leases.csv
+- tenants.csv
+- units.csv
+- properties.csv
+- locations.csv
+
+----------------------------------
+DATA QUALITY ISSUES IDENTIFIED
+----------------------------------
+1. Missing Values
+   - Some lease 'end_date' values were NULL (treated as ongoing leases).
+   - Minor gaps in tenant email fields (validated for presence).
+
+2. Invalid Values
+   - Negative rent_per_month values found — corrected to absolute values.
+   - Negative arrears also standardized to positive amounts.
+
+3. Date Issues
+   - Inconsistent date formats converted to datetime (DD/MM/YYYY).
+   - End dates before start dates flagged as invalid.
+
+4. Duplicates
+   - Checked across tenant names and property-unit relationships — none found.
+
+5. Outliers
+   - Rent outliers manually inspected; extreme but valid (due to property size).
+
+----------------------------------
+NEW COLUMNS CREATED
+----------------------------------
+- lease_duration_months:
+    → Duration between start_date and end_date (or today if ongoing).
+- lease_status:
+    → 'Ongoing' if end_date is NULL or future.
+    → 'Expired' if end_date < today.
+    → 'Invalid' if start_date > end_date.
+- valid_lease:
+    → 1 if valid (start < end or ongoing), else 0.
+- annual_rent:
+    → rent_per_month × 12.
+- Standardized 'location' names to Proper Case.
+
+----------------------------------
+SUMMARY INSIGHTS
+----------------------------------
+- Total leases: 12
+- Ongoing leases: 6
+- Expired leases: 6
+- Invalid leases: 0
+- Average monthly rent: KES 48,166.67
+- Total annual rent potential: KES 6,936,000.00
+
+----------------------------------
+OUTPUT
+----------------------------------
+ Cleaned dataset exported to:
+   Deliverables/Cleaned_Data_Samuel_Wanyua.xlsx 
+   Deliverables/Cleaned_Data_Samuel_Wanyua.csv 
+
